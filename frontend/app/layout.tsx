@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: any }) {
   return (
     <html lang="en">
       <head>
-        <ColorSchemeScript />
+        <ColorSchemeScript defaultColorScheme='dark' />
         <link rel="shortcut icon" href="/mood-crazy-happy.svg" />
         <meta
           name="viewport"
