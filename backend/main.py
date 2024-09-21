@@ -101,7 +101,7 @@ except Exception as e:
 ###########################################
 
 # 30 days doge coin news
-time.sleep(10)
+time.sleep(5)
 API_KEY = os.getenv("NEWSAPI_KEY", "YOUR_API_KEY")
 news = get_news(API_KEY, "Dogecoin", 30, "relevancy")
 for news_item in news:
@@ -127,7 +127,7 @@ for news_item in news:
     df = pd.concat([df, _df])
 
 # 30 days Elon Musk news
-time.sleep(10)
+time.sleep(5)
 API_KEY = os.getenv("NEWSAPI_KEY", "YOUR_API_KEY")
 news = get_news(API_KEY, "musk", 30, "relevancy")
 for news_item in news:
@@ -153,7 +153,7 @@ for news_item in news:
     df = pd.concat([df, _df])
 
 # 30 days Donald Trump news
-time.sleep(10)
+time.sleep(5)
 API_KEY = os.getenv("NEWSAPI_KEY", "YOUR_API_KEY")
 news = get_news(API_KEY, "Trump", 30, "relevancy")
 for news_item in news:
@@ -179,7 +179,7 @@ for news_item in news:
     df = pd.concat([df, _df])
 
 # 30 days TrumpCoin news
-time.sleep(10)
+time.sleep(5)
 API_KEY = os.getenv("NEWSAPI_KEY", "YOUR_API_KEY")
 news = get_news(API_KEY, "TrumpCoin", 30, "relevancy")
 for news_item in news:
@@ -239,7 +239,6 @@ def analyze_sentiment():
     if "start_date" not in data or "end_date" not in data:
         return jsonify({"error": "start_date and end_date are required"}), 400
 
-
     date_format: str = "%Y-%m-%d"
     datetime_format: str = "%Y-%m-%dT%H:%M:%S"
     start_date: datetime = datetime.strptime(data["start_date"], date_format)
@@ -247,7 +246,7 @@ def analyze_sentiment():
 
     try:
         asset_name: str = data["asset_name"]
-        
+
         filtered_df = df[
             (df["Date"] >= start_date.strftime(datetime_format))
             & (df["Date"] <= end_date.strftime(datetime_format))
@@ -261,12 +260,44 @@ def analyze_sentiment():
 
     sentiment_counts = filtered_df["Sentiment"].value_counts().to_dict()
 
+    x: int = sentiment_counts.get("good", 0)
+    y: int = sentiment_counts.get("bad", 0)
+    z: int = sentiment_counts.get("neutral", 0)
+    score: int = round(5.5 + 4.5 * (x - y) / (x + y + z))
+    news_list: list[dict] = []
+
+    if score == 5 or score == 6:
+        # pick a good & a bad from the date range
+        news1 = filtered_df[filtered_df["Sentiment"] == "good"].sample(1)
+        news2 = filtered_df[filtered_df["Sentiment"] == "bad"].sample(1)
+    elif score >= 7:
+        # pick two goods from the date range
+        news1 = filtered_df[filtered_df["Sentiment"] == "good"].sample(1)
+        news2 = filtered_df[filtered_df["Sentiment"] == "good"].sample(1)
+    else:
+        # pick two bads from the date range
+        news1 = filtered_df[filtered_df["Sentiment"] == "bad"].sample(1)
+        news2 = filtered_df[filtered_df["Sentiment"] == "bad"].sample(1)
+
+    news_list: list[dict] = [
+        {
+            "content": news1["Content"].values[0],
+            "date": news1["Date"].values[0],
+        },
+        {
+            "content": news2["Content"].values[0],
+            "date": news2["Date"].values[0],
+        },
+    ]
+
     response = {
         "sentiment": {
-            "good": sentiment_counts.get("good", 0),
-            "bad": sentiment_counts.get("bad", 0),
-            "neutral": sentiment_counts.get("neutral", 0),
-        }
+            "good": x,
+            "bad": y,
+            "neutral": z,
+        },
+        "score": score,
+        "news": news_list,
     }
 
     return jsonify(response)
