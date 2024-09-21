@@ -4,7 +4,7 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 const MemeCoinModule = buildModule("MemeCoinModule", (m) => {
-  const contract = m.contract("MemeCoin", ["TrumpCoin", "TRUMP", "1000000000000000000000000"]);
+  const contract = m.contract("MemeCoin", ["DogeCoin", "DOGE", "1000000000000000000000000"]);
 
   return { contract };
 });

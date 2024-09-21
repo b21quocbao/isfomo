@@ -4,5 +4,6 @@
   "AllowanceTransferModule#AllowanceTransfer": "0x5Af98aBf4f4AF98feB893c790334E533ef0d3246",
   "PoolmModule#PoolManager": "0x40e0E511C5f7B7A3F111E6569aE6c07E6D6eBD2E",
   "PosmModule#PositionManager": "0xF507901D3fc14b9a94c209F385A5C187f4C3F611",
-  "IsFomoModule#IsFomo": "0xcCA6763EBf014f220484e8716938302A8419b7Ed"
+  "IsFomoModule#IsFomo": "0xcCA6763EBf014f220484e8716938302A8419b7Ed",
+  "MemeCoinModule#MemeCoin": "0xBdD620d44D64789b24173307A2FE29F0C4c423F0"
 }

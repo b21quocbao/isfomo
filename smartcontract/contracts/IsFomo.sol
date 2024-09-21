@@ -57,7 +57,7 @@ contract IsFomo is ChainlinkClient, Ownable {
     /**
      * @notice Creates a Chainlink request to fetch emotion score from an external API.
      */
-    function requestEmotionScore() public onlyOwner {
+    function requestEmotionScore() public {
         Chainlink.Request memory req = _buildChainlinkRequest(
             jobId,
             address(this),
