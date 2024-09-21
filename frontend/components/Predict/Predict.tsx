@@ -39,8 +39,6 @@ export const Predict = ({ param }) => {
   const pathname = usePathname();
   const p = pathname.substring(8);
   console.log(pathname.substring(8));
-  const lightBoxes = Array.from({ length: 8 });
-  const darkBoxes = Array.from({ length: 2 });
 
   const [responseData, setResponseData] = useState({
     news: [],
@@ -62,7 +60,7 @@ export const Predict = ({ param }) => {
     end_date: '2024-09-19',
     asset_name: 'TrumpCoin',
   };
-  const data = (p === 'donald_trump' ? trumpData : dogeData);
+  const data = p === 'donald_trump' ? trumpData : dogeData;
 
   useEffect(() => {
     const handleSubmit = async () => {
@@ -105,6 +103,25 @@ export const Predict = ({ param }) => {
 
   const handleChoose = (link) => {
     router.push(`/search/${link}`);
+  };
+
+  const lightBoxes = () => {
+    const boxes = [];
+    for (let i = 0; i < ste; i++) {
+      boxes.push(
+        <Box key={i} w={8} h={24} style={{ borderRadius: '2px', backgroundColor: '#878787' }} />
+      );
+    }
+    return boxes;
+  };
+  const darkBoxes = () => {
+    const boxes = [];
+    for (let i = 0; i < ste; i++) {
+      boxes.push(
+        <Box key={i} w={8} h={24} style={{ borderRadius: '2px', backgroundColor: '#878787' }} />
+      );
+    }
+    return boxes;
   };
 
   return (
@@ -199,24 +216,19 @@ export const Predict = ({ param }) => {
                   :
                 </Text>
                 <Group gap="sm" align="center" ml={20}>
-                  <img src="/mood-crazy-happy.svg" alt="LOGO SVG" width={36} height={36} />
+                  {ste >= 8 ? (
+                    <img src="/mood-crazy-happy.svg" alt="LOGO SVG" width={36} height={36} />
+                  ) : ste >= 5 ? (
+                    <img src="/mood-smile.svg" alt="LOGO SVG" width={36} height={36} />
+                  ) : ste >= 3 ? (
+                    <img src="/mood-confuzed.svg" alt="LOGO SVG" width={36} height={36} />
+                  ) : (
+                    <img src="/mood-wrrr.svg" alt="LOGO SVG" width={36} height={36} />
+                  )}
+
                   <Group gap={4}>
-                    {lightBoxes.map((_, index) => (
-                      <Box
-                        key={index}
-                        w={8}
-                        h={24}
-                        style={{ borderRadius: '2px', backgroundColor: '#878787' }}
-                      />
-                    ))}
-                    {darkBoxes.map((_, index) => (
-                      <Box
-                        key={index}
-                        w={8}
-                        h={24}
-                        style={{ borderRadius: '2px', backgroundColor: '#3d3d3d' }}
-                      />
-                    ))}
+                    {lightBoxes}
+                    {darkBoxes}
                   </Group>
                   <Text fw={600}>{ste + '/10'}</Text>
                 </Group>
@@ -226,7 +238,9 @@ export const Predict = ({ param }) => {
                   Related token:
                 </Text>
                 <Group gap={0}>
-                  <Text fw={600} ml={20}>{p === 'donald_trump' ? 'TrumpCoin:' : 'DogeCoin:'}</Text>
+                  <Text fw={600} ml={20}>
+                    {p === 'donald_trump' ? 'TrumpCoin:' : 'DogeCoin:'}
+                  </Text>
                   <Button
                     variant="transparent"
                     color="#fff"
