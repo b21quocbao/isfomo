@@ -1,0 +1,3 @@
+[submodule "feelLLM"]
+	path = feelLLM
+	url = https://github.com/itdevwu/feelLLM.git
