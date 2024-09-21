@@ -88,3 +88,25 @@ will return:
     }
 }
 ```
+
+## GET Sentiment Analysis
+
+- PATH: `/recent/<asset_name>`
+- Request Args:
+  - `asset_name`: Required, either `DOGE` or `TrumpCoin`
+- Response Args:
+  - `data`: Same to `score` above
+
+For example,
+
+```
+/recent/DOGE
+```
+
+will return:
+
+```json
+{
+  "data": 6
+}
+```
