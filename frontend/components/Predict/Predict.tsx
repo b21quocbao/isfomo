@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { IconAt, IconInfoSquareRoundedFilled } from '@tabler/icons-react';
+import axios from 'axios';
 import {
   ActionIcon,
   Box,
@@ -29,13 +30,73 @@ const theme = createTheme({
   },
 });
 
+const trumpCoinAddr = '0x0AB38A89CA6CC808cB255ECe2CCbf660d74ebeFe';
+const dogeCoinAddr = '0xBdD620d44D64789b24173307A2FE29F0C4c423F0';
+
 export const Predict = ({ param }) => {
   const [searchContent, setSearchContent] = useState(decodeURIComponent(param) ?? 'donald_trump');
   const router = useRouter();
   const pathname = usePathname();
+  const p = pathname.substring(8);
   console.log(pathname.substring(8));
   const lightBoxes = Array.from({ length: 8 });
   const darkBoxes = Array.from({ length: 2 });
+
+  const [responseData, setResponseData] = useState({
+    news: [],
+    score: 0,
+  });
+  const [error, setError] = useState(null);
+  const [ste, setSte] = useState(0);
+  const [newsList, setNewsList] = useState([]);
+  const [showContent, setShowContent] = useState(false);
+
+  const url = 'https://ethglobal2024.itdevwu.com/isfomo/STE';
+  const dogeData = {
+    start_date: '2024-09-13',
+    end_date: '2024-09-19',
+    asset_name: 'DOGE',
+  };
+  const trumpData = {
+    start_date: '2024-09-13',
+    end_date: '2024-09-19',
+    asset_name: 'TrumpCoin',
+  };
+  const data = (p === 'donald_trump' ? trumpData : dogeData);
+
+  useEffect(() => {
+    const handleSubmit = async () => {
+      try {
+        const response = await axios
+          .post(url, data, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            httpsAgent: new (require('https').Agent)({ rejectUnauthorized: false }), // To replicate the `-k` option
+          })
+          .then((response) => {
+            console.log(response.data);
+            setResponseData(response.data); // Store response data
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        setError(null); // Clear any previous errors
+      } catch (err) {
+        console.error('Error', err.message);
+        setError(err.message); // Set error message if request fails
+        setResponseData(null); // Clear previous data on error
+      }
+    };
+    handleSubmit(); // Call handleSubmit on mount
+  }, []);
+
+  const updateValue = () => {
+    console.log(responseData);
+    setSte(responseData.score);
+    setNewsList(responseData.news);
+    setShowContent(true);
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -52,7 +113,7 @@ export const Predict = ({ param }) => {
         <Stack w="100%" p={50}>
           <Group justify="space-evenly">
             <Button
-              color={pathname.substring(8) === 'donald_trump' ? '#5e5e5e' : '#3d3d3d'}
+              color={p === 'donald_trump' ? '#5e5e5e' : '#3d3d3d'}
               w="30%"
               h={60}
               radius="sm"
@@ -61,7 +122,7 @@ export const Predict = ({ param }) => {
               Donald Trump
             </Button>
             <Button
-              color={pathname.substring(8) === 'elon_musk' ? '#5e5e5e' : '#3d3d3d'}
+              color={p === 'elon_musk' ? '#5e5e5e' : '#3d3d3d'}
               w="30%"
               h={60}
               radius="sm"
@@ -69,43 +130,26 @@ export const Predict = ({ param }) => {
             >
               Elon Musk
             </Button>
-            <Button
-              color='#3d3d3d'
-              w="30%"
-              h={60}
-              radius="sm"
-              disabled
-            >
+            <Button color="#3d3d3d" w="30%" h={60} radius="sm" disabled>
               PEPE
             </Button>
-            <Button
-              color='#3d3d3d'
-              w="30%"
-              h={60}
-              radius="sm"
-              disabled
-            >
+            <Button color="#3d3d3d" w="30%" h={60} radius="sm" disabled>
               AIDOGE
             </Button>
-            <Button
-              color='#3d3d3d'
-              w="30%"
-              h={60}
-              radius="sm"
-              disabled
-            >
+            <Button color="#3d3d3d" w="30%" h={60} radius="sm" disabled>
               APE
             </Button>
-            <Button
-              color='#3d3d3d'
-              w="30%"
-              h={60}
-              radius="sm"
-              disabled
-            >
+            <Button color="#3d3d3d" w="30%" h={60} radius="sm" disabled>
               ...
             </Button>
           </Group>
+          {(p === 'donald_trump' || p === 'elon_musk') && (
+            <Group justify="center">
+              <Button color="#5e5e5e" onClick={updateValue} w={200}>
+                Get value
+              </Button>
+            </Group>
+          )}
           {/* <Text size="lg" fw={700}>
             Is topic of{' '}
             <Text span td="underline" fw={900} size="xl">
@@ -128,87 +172,104 @@ export const Predict = ({ param }) => {
               Search
             </Button>
           </Group> */}
-          <Group mt={30} align="flex-start">
-            <Text fw={700} size="lg">
-              STE
-              <Tooltip
-                fw={600}
-                arrowPosition="side"
-                label={
-                  <Text inherit>
-                    STE(Short term emotion) is an integer ranging from 1 to 10, <br />
-                    pointing out how popular the topic above is. <br />
-                    (Higher means more popular)
-                  </Text>
-                }
-                withArrow
-                position="top-start"
-                arrowSize={8}
-                arrowOffset={20}
-              >
-                <ActionIcon variant="transparent" color="gray" onClick={() => {}}>
-                  <IconInfoSquareRoundedFilled style={{ width: rem(16) }} />
-                </ActionIcon>
-              </Tooltip>
-              :
-            </Text>
-            <Group gap="sm" align="center" ml={20}>
-              <img src="/mood-crazy-happy.svg" alt="LOGO SVG" width={36} height={36} />
-              <Group gap={4}>
-                {lightBoxes.map((_, index) => (
-                  <Box
-                    key={index}
-                    w={8}
-                    h={24}
-                    style={{ borderRadius: '2px', backgroundColor: '#878787' }}
-                  />
-                ))}
-                {darkBoxes.map((_, index) => (
-                  <Box
-                    key={index}
-                    w={8}
-                    h={24}
-                    style={{ borderRadius: '2px', backgroundColor: '#3d3d3d' }}
-                  />
-                ))}
-              </Group>
-              <Text fw={600}>8/10</Text>
-            </Group>
-            
-          </Group>
-          <Stack mt={30}>
-            <Text fw={700} size="lg">
-              Related token:
-            </Text>
-            <Stack ml={50} gap="xs">
-              <Group>
-                <Text fw={600}>Turbo:</Text>
-                <Text fw={400} ml={50}>
-                  0xa35923162c...431ad920d3
+          {showContent && (
+            <>
+              <Group mt={30} align="flex-start">
+                <Text fw={700} size="lg">
+                  STE
+                  <Tooltip
+                    fw={600}
+                    arrowPosition="side"
+                    label={
+                      <Text inherit>
+                        STE(Short term emotion) is an integer ranging from 1 to 10, <br />
+                        pointing out how popular the topic above is. <br />
+                        (Higher means more popular)
+                      </Text>
+                    }
+                    withArrow
+                    position="top-start"
+                    arrowSize={8}
+                    arrowOffset={20}
+                  >
+                    <ActionIcon variant="transparent" color="gray" onClick={() => {}}>
+                      <IconInfoSquareRoundedFilled style={{ width: rem(16) }} />
+                    </ActionIcon>
+                  </Tooltip>
+                  :
                 </Text>
-                <CopyButtonWrap link="0xa35923162c49cf95e6bf26623385eb431ad920d3" />
-              </Group>
-            </Stack>
-          </Stack>
-          <Stack mt={30}>
-            <Text fw={700} size="lg">
-              Related news:
-            </Text>
-            <Stack ml={50} gap="xs">
-              <Group w="100%" align="flex-start" justify="space-between">
-                <Text fw={600}>No.1:</Text>
-                <Stack w="85%">
-                  <Text fw={400}>
-                    Donald Trump bought hamburgers for customers with Bitcoin in a bar named
-                    'Pubkey'...
-                  </Text>
-                  <Group justify="flex-end">
-                    <Text fw={400}>SEP 19, 2024, 08:02 AM</Text>
+                <Group gap="sm" align="center" ml={20}>
+                  <img src="/mood-crazy-happy.svg" alt="LOGO SVG" width={36} height={36} />
+                  <Group gap={4}>
+                    {lightBoxes.map((_, index) => (
+                      <Box
+                        key={index}
+                        w={8}
+                        h={24}
+                        style={{ borderRadius: '2px', backgroundColor: '#878787' }}
+                      />
+                    ))}
+                    {darkBoxes.map((_, index) => (
+                      <Box
+                        key={index}
+                        w={8}
+                        h={24}
+                        style={{ borderRadius: '2px', backgroundColor: '#3d3d3d' }}
+                      />
+                    ))}
                   </Group>
-                </Stack>
+                  <Text fw={600}>{ste + '/10'}</Text>
+                </Group>
               </Group>
-            </Stack>
-          </Stack>
+              <Stack mt={30}>
+                <Text fw={700} size="lg">
+                  Related token:
+                </Text>
+                <Group gap={0}>
+                  <Text fw={600} ml={20}>{p === 'donald_trump' ? 'TrumpCoin:' : 'DogeCoin:'}</Text>
+                  <Button
+                    variant="transparent"
+                    color="#fff"
+                    size="sm"
+                    onClick={() => {
+                      if (p === 'donald_trump') {
+                        window.open('https://arbiscan.io/token/' + trumpCoinAddr);
+                      } else {
+                        window.open('https://arbiscan.io/token/' + dogeCoinAddr);
+                      }
+                    }}
+                  >
+                    <Text fw={400} size="sm" td="underline">
+                      {p === 'donald_trump' ? trumpCoinAddr : dogeCoinAddr}
+                    </Text>
+                  </Button>
+
+                  <CopyButtonWrap link={p === 'donald_trump' ? trumpCoinAddr : dogeCoinAddr} />
+                </Group>
+              </Stack>
+              <Stack mt={30}>
+                <Text fw={700} size="lg">
+                  Related news:
+                </Text>
+                <Stack ml={50} gap="xs">
+                  {newsList &&
+                    newsList.map((item, index) => (
+                      <Group w="100%" align="flex-start" justify="space-between">
+                        <Text fw={600}>{'No.' + (index + 1) + ':'}</Text>
+                        <Stack w="85%">
+                          <Text fw={400} size="sm">
+                            {item.content}
+                          </Text>
+                          <Group justify="flex-end" size="xs">
+                            <Text fw={400}>{item.date}</Text>
+                          </Group>
+                        </Stack>
+                      </Group>
+                    ))}
+                </Stack>
+              </Stack>
+            </>
+          )}
         </Stack>
       </Stack>
     </MantineProvider>

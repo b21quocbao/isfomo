@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { IconCoinFilled, IconDirectionSignFilled, IconFountainFilled } from '@tabler/icons-react';
 import {
   Button,
@@ -24,10 +25,15 @@ const theme = createTheme({
   },
 });
 
+const trumpCoinAddr = '0x0AB38A89CA6CC808cB255ECe2CCbf660d74ebeFe';
+const dogeCoinAddr = '0xBdD620d44D64789b24173307A2FE29F0C4c423F0';
+
 export const Actions = () => {
   const [tradeContent, setTradeContent] = useState('');
   const [showTool, setShowTool] = useState(false);
   const [isDeposit, setIsDeposit] = useState(true);
+  const pathname = usePathname();
+  const p = pathname.substring(8);
   return (
     <MantineProvider theme={theme}>
       <Stack w="49%" mt={showTool ? 0 : 100} align="center">
@@ -36,30 +42,47 @@ export const Actions = () => {
             <Text size="lg" fw={700}>
               Token address:{' '}
               {showTool && (
-                <Text w={400} inherit>
+                <Text w={350} size="sm" fw={500}>
                   {tradeContent}
                 </Text>
               )}
             </Text>
-            <Input
-              w={400}
-              variant="filled"
-              size="md"
-              radius="md"
-              value={tradeContent}
-              onChange={(event) => setTradeContent(event.currentTarget.value)}
-              placeholder="Input token address"
-            />
+            <Group>
+              <Input
+                w={370}
+                variant="filled"
+                size="md"
+                radius="md"
+                value={tradeContent}
+                onChange={(event) => setTradeContent(event.currentTarget.value)}
+                placeholder="Input token address"
+              />
+              <Button
+                variant="filled"
+                radius="md"
+                color="#5e5e5e"
+                rightSection={<IconDirectionSignFilled size={18} />}
+                onClick={() => {
+                  if (p === 'donald trump') {
+                    window.open(
+                      'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=' +
+                        trumpCoinAddr +
+                        '&chain=arbitrum'
+                    );
+                  } else {
+                    window.open(
+                      'https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=' +
+                        dogeCoinAddr +
+                        '&chain=arbitrum'
+                    );
+                  }
+                }}
+              >
+                Go to Trade
+              </Button>
+            </Group>
           </Stack>
           <Group gap="xl">
-            <Button
-              variant="filled"
-              radius="md"
-              color="#5e5e5e"
-              rightSection={<IconDirectionSignFilled size={18} />}
-            >
-              Go to Trade
-            </Button>
             <Button
               variant="filled"
               radius="md"
@@ -129,7 +152,13 @@ export const Actions = () => {
                     />
                   </Group>
                   <Group justify="center" mt="md">
-                    <Button color="#5e5e5e" radius="md" variant="filled" w={200} rightSection={<IconFountainFilled size={18} />}>
+                    <Button
+                      color="#5e5e5e"
+                      radius="md"
+                      variant="filled"
+                      w={200}
+                      rightSection={<IconFountainFilled size={18} />}
+                    >
                       Add Liquidity
                     </Button>
                   </Group>
@@ -137,7 +166,13 @@ export const Actions = () => {
               ) : (
                 <>
                   <Group justify="center" mt="md">
-                    <Button color="#5e5e5e" radius="md" variant="filled" w={150} rightSection={<IconCoinFilled size={18} />}>
+                    <Button
+                      color="#5e5e5e"
+                      radius="md"
+                      variant="filled"
+                      w={150}
+                      rightSection={<IconCoinFilled size={18} />}
+                    >
                       Withdraw
                     </Button>
                   </Group>
