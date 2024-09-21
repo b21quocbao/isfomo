@@ -53,21 +53,57 @@ export const Predict = ({ param }) => {
           <Group justify="space-evenly">
             <Button
               color={pathname.substring(8) === 'donald_trump' ? '#5e5e5e' : '#3d3d3d'}
-              w="40%"
-              h={80}
-              radius="lg"
+              w="30%"
+              h={60}
+              radius="sm"
               onClick={() => handleChoose('donald_trump')}
             >
               Donald Trump
             </Button>
             <Button
               color={pathname.substring(8) === 'elon_musk' ? '#5e5e5e' : '#3d3d3d'}
-              w="40%"
-              h={80}
-              radius="lg"
+              w="30%"
+              h={60}
+              radius="sm"
               onClick={() => handleChoose('elon_musk')}
             >
               Elon Musk
+            </Button>
+            <Button
+              color='#3d3d3d'
+              w="30%"
+              h={60}
+              radius="sm"
+              disabled
+            >
+              PEPE
+            </Button>
+            <Button
+              color='#3d3d3d'
+              w="30%"
+              h={60}
+              radius="sm"
+              disabled
+            >
+              AIDOGE
+            </Button>
+            <Button
+              color='#3d3d3d'
+              w="30%"
+              h={60}
+              radius="sm"
+              disabled
+            >
+              APE
+            </Button>
+            <Button
+              color='#3d3d3d'
+              w="30%"
+              h={60}
+              radius="sm"
+              disabled
+            >
+              ...
             </Button>
           </Group>
           {/* <Text size="lg" fw={700}>
@@ -136,8 +172,9 @@ export const Predict = ({ param }) => {
                   />
                 ))}
               </Group>
-              <Text fw={600}>8/10 FOMO!</Text>
+              <Text fw={600}>8/10</Text>
             </Group>
+            
           </Group>
           <Stack mt={30}>
             <Text fw={700} size="lg">
