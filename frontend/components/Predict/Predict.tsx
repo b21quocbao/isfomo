@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { IconAt, IconInfoSquareRoundedFilled } from '@tabler/icons-react';
 import {
   ActionIcon,
+  Box,
   Button,
   createTheme,
   Group,
@@ -29,19 +30,47 @@ const theme = createTheme({
 });
 
 export const Predict = ({ param }) => {
-  const [searchContent, setSearchContent] = useState(decodeURIComponent(param) ?? '? ? ?');
+  const [searchContent, setSearchContent] = useState(decodeURIComponent(param) ?? 'donald_trump');
   const router = useRouter();
+  const pathname = usePathname();
+  console.log(pathname.substring(8));
+  const lightBoxes = Array.from({ length: 8 });
+  const darkBoxes = Array.from({ length: 2 });
 
   const handleSearch = (e) => {
     e.preventDefault();
     router.push(`/search/${searchContent}`); // Navigate to the results page with the query
   };
 
+  const handleChoose = (link) => {
+    router.push(`/search/${link}`);
+  };
+
   return (
     <MantineProvider theme={theme}>
       <Stack w="49%" align="center">
         <Stack w="100%" p={50}>
-          <Text size="lg" fw={700}>
+          <Group justify="space-evenly">
+            <Button
+              color={pathname.substring(8) === 'donald_trump' ? '#5e5e5e' : '#3d3d3d'}
+              w="40%"
+              h={80}
+              radius="lg"
+              onClick={() => handleChoose('donald_trump')}
+            >
+              Donald Trump
+            </Button>
+            <Button
+              color={pathname.substring(8) === 'elon_musk' ? '#5e5e5e' : '#3d3d3d'}
+              w="40%"
+              h={80}
+              radius="lg"
+              onClick={() => handleChoose('elon_musk')}
+            >
+              Elon Musk
+            </Button>
+          </Group>
+          {/* <Text size="lg" fw={700}>
             Is topic of{' '}
             <Text span td="underline" fw={900} size="xl">
               {searchContent}
@@ -62,16 +91,16 @@ export const Predict = ({ param }) => {
             <Button variant="filled" size="md" radius="lg" color="#5e5e5e" onClick={handleSearch}>
               Search
             </Button>
-          </Group>
+          </Group> */}
           <Group mt={30} align="flex-start">
             <Text fw={700} size="lg">
-              S(FOMO)
+              STE
               <Tooltip
                 fw={600}
                 arrowPosition="side"
                 label={
                   <Text inherit>
-                    S(FOMO) is an integer ranging from 0 to 100, <br />
+                    STE(Short term emotion) is an integer ranging from 1 to 10, <br />
                     pointing out how popular the topic above is. <br />
                     (Higher means more popular)
                   </Text>
@@ -87,12 +116,28 @@ export const Predict = ({ param }) => {
               </Tooltip>
               :
             </Text>
-            <Stack gap="xs" align="flex-end">
+            <Group gap="sm" align="center" ml={20}>
               <img src="/mood-crazy-happy.svg" alt="LOGO SVG" width={36} height={36} />
-              <Text fw={600} size="xl">
-                90(high)
-              </Text>
-            </Stack>
+              <Group gap={4}>
+                {lightBoxes.map((_, index) => (
+                  <Box
+                    key={index}
+                    w={8}
+                    h={24}
+                    style={{ borderRadius: '2px', backgroundColor: '#878787' }}
+                  />
+                ))}
+                {darkBoxes.map((_, index) => (
+                  <Box
+                    key={index}
+                    w={8}
+                    h={24}
+                    style={{ borderRadius: '2px', backgroundColor: '#3d3d3d' }}
+                  />
+                ))}
+              </Group>
+              <Text fw={600}>8/10 FOMO!</Text>
+            </Group>
           </Group>
           <Stack mt={30}>
             <Text fw={700} size="lg">

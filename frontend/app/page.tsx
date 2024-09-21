@@ -4,6 +4,6 @@ import { Hub } from '@/components/Hub/Hub';
 
 export default function HomePage() {
   return (
-    <Hub param={"? ? ?"} />
+    <Hub param={"donald_trump"} />
   );
 }
