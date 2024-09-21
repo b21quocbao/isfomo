@@ -1,0 +1,8 @@
+{
+  "LockModule#MemeCoin": "0x0AB38A89CA6CC808cB255ECe2CCbf660d74ebeFe",
+  "USDCModule#USDCToken": "0xd0700B95d2A7b3aD7d86692228d7d55079F58D54",
+  "AllowanceTransferModule#AllowanceTransfer": "0x5Af98aBf4f4AF98feB893c790334E533ef0d3246",
+  "PoolmModule#PoolManager": "0x40e0E511C5f7B7A3F111E6569aE6c07E6D6eBD2E",
+  "PosmModule#PositionManager": "0xF507901D3fc14b9a94c209F385A5C187f4C3F611",
+  "IsFomoModule#IsFomo": "0xcCA6763EBf014f220484e8716938302A8419b7Ed"
+}

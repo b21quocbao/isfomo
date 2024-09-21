@@ -1,0 +1,13 @@
+{
+  "name": "hardhat-project",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.11"
+  },
+  "dependencies": {
+    "@chainlink/contracts": "^1.2.0",
+    "@openzeppelin/contracts": "^5.0.2",
+    "@uniswap/v4-core": "file:./contracts/lib/v4-core",
+    "dotenv": "^16.4.5"
+  }
+}
