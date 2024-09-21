@@ -3,11 +3,11 @@ import sys
 import time
 import argparse
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pandas as pd
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from tqdm import tqdm
 from flask import Flask, request, jsonify
 from feelLLM.src.model_gaianet import GaiaNetCausalModelForClassification
@@ -101,7 +101,7 @@ except Exception as e:
 ###########################################
 
 # 30 days doge coin news
-time.sleep(5)
+time.sleep(1)
 API_KEY = os.getenv("NEWSAPI_KEY", "YOUR_API_KEY")
 news = get_news(API_KEY, "Dogecoin", 30, "relevancy")
 for news_item in news:
@@ -127,7 +127,7 @@ for news_item in news:
     df = pd.concat([df, _df])
 
 # 30 days Elon Musk news
-time.sleep(5)
+time.sleep(1)
 API_KEY = os.getenv("NEWSAPI_KEY", "YOUR_API_KEY")
 news = get_news(API_KEY, "musk", 30, "relevancy")
 for news_item in news:
@@ -153,7 +153,7 @@ for news_item in news:
     df = pd.concat([df, _df])
 
 # 30 days Donald Trump news
-time.sleep(5)
+time.sleep(1)
 API_KEY = os.getenv("NEWSAPI_KEY", "YOUR_API_KEY")
 news = get_news(API_KEY, "Trump", 30, "relevancy")
 for news_item in news:
@@ -179,7 +179,7 @@ for news_item in news:
     df = pd.concat([df, _df])
 
 # 30 days TrumpCoin news
-time.sleep(5)
+time.sleep(1)
 API_KEY = os.getenv("NEWSAPI_KEY", "YOUR_API_KEY")
 news = get_news(API_KEY, "TrumpCoin", 30, "relevancy")
 for news_item in news:
@@ -298,6 +298,50 @@ def analyze_sentiment():
         },
         "score": score,
         "news": news_list,
+    }
+
+    return jsonify(response)
+
+
+@app.route("/recent/<asset_name>", methods=["GET"])
+def recent_analyze_sentiment(asset_name: str):
+    data: dict = {"asset_name": asset_name}
+
+    datetime_format: str = "%Y-%m-%dT%H:%M:%S"
+
+    start_date: str = datetime.now() - timedelta(days=7)
+    end_date: str = datetime.now()
+
+    print(start_date)
+    print(end_date)
+    print(data["asset_name"])
+
+    try:
+        asset_name: str = data["asset_name"]
+
+        filtered_df = df[
+            (df["Date"] >= start_date.strftime(datetime_format))
+            & (df["Date"] <= end_date.strftime(datetime_format))
+            & (asset_name == df["Asset"])
+        ]
+    except:
+        filtered_df = df[
+            (df["Date"] >= start_date.strftime(datetime_format))
+            & (df["Date"] <= end_date.strftime(datetime_format))
+        ]
+
+    sentiment_counts = filtered_df["Sentiment"].value_counts().to_dict()
+
+    x: int = sentiment_counts.get("good", 0)
+    y: int = sentiment_counts.get("bad", 0)
+    z: int = sentiment_counts.get("neutral", 0)
+    try:
+        score: int = round(5.5 + 4.5 * (x - y) / (x + y + z))
+    except:
+        score: int = 0
+
+    response = {
+        "data": score,
     }
 
     return jsonify(response)
