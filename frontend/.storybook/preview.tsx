@@ -22,5 +22,5 @@ function ColorSchemeWrapper({ children }: { children: React.ReactNode }) {
 
 export const decorators = [
   (renderStory: any) => <ColorSchemeWrapper>{renderStory()}</ColorSchemeWrapper>,
-  (renderStory: any) => <MantineProvider theme={theme}>{renderStory()}</MantineProvider>,
+  (renderStory: any) => <MantineProvider theme={theme} defaultColorScheme="dark">{renderStory()}</MantineProvider>,
 ];

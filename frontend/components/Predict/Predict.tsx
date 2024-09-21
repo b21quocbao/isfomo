@@ -125,7 +125,7 @@ export const Predict = ({ param }) => {
   };
 
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
       <Stack w="49%" align="center">
         <Stack w="100%" p={50}>
           <Group justify="space-evenly">

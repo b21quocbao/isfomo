@@ -35,7 +35,7 @@ export const Actions = () => {
   const pathname = usePathname();
   const p = pathname.substring(8);
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
       <Stack w="49%" mt={showTool ? 0 : 100} align="center">
         <Stack w="100%" p={50} gap={30} align="center">
           <Stack align="flex-start">
