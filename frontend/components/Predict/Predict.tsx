@@ -116,9 +116,9 @@ export const Predict = ({ param }) => {
   };
   const darkBoxes = () => {
     const boxes = [];
-    for (let i = 0; i < ste; i++) {
+    for (let i = 0; i < 10 - ste; i++) {
       boxes.push(
-        <Box key={i} w={8} h={24} style={{ borderRadius: '2px', backgroundColor: '#878787' }} />
+        <Box key={i} w={8} h={24} style={{ borderRadius: '2px', backgroundColor: '#3d3d3d' }} />
       );
     }
     return boxes;
@@ -227,8 +227,8 @@ export const Predict = ({ param }) => {
                   )}
 
                   <Group gap={4}>
-                    {lightBoxes}
-                    {darkBoxes}
+                    {lightBoxes()}
+                    {darkBoxes()}
                   </Group>
                   <Text fw={600}>{ste + '/10'}</Text>
                 </Group>
@@ -269,13 +269,13 @@ export const Predict = ({ param }) => {
                   {newsList &&
                     newsList.map((item, index) => (
                       <Group w="100%" align="flex-start" justify="space-between">
-                        <Text fw={600}>{'No.' + (index + 1) + ':'}</Text>
-                        <Stack w="85%">
+                        <Text fw={600} size="sm">{'No.' + (index + 1) + ':'}</Text>
+                        <Stack w="85%" gap={0}>
                           <Text fw={400} size="sm">
                             {item.content}
                           </Text>
-                          <Group justify="flex-end" size="xs">
-                            <Text fw={400}>{item.date}</Text>
+                          <Group justify="flex-end">
+                            <Text fw={400} size="xs">{item.date}</Text>
                           </Group>
                         </Stack>
                       </Group>
