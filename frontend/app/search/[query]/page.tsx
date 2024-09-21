@@ -2,7 +2,7 @@
 import { Hub } from '@/components/Hub/Hub';
 import { useRouter } from 'next/navigation';
 
-export default function ResultsPage({ params }) {
+export default function ResultsPage({ params }: { params: any }) {
   const { query } = params; // Get the dynamic query parameter
 
   // Fetch or filter your data based on the query
@@ -22,7 +22,7 @@ export default function ResultsPage({ params }) {
 }
 
 // Example function to simulate fetching results
-function fetchResults(query) {
+function fetchResults(query: any) {
   // Replace this with actual fetching logic
   return [
     { id: 1, name: `Result for ${query} 1` },

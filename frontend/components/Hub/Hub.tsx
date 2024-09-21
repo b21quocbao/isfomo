@@ -5,7 +5,7 @@ import { Actions } from '@/components/Actions/Actions';
 import { Connect } from '@/components/Connect/Connect';
 import { Predict } from '@/components/Predict/Predict';
 
-export const Hub = ({ param }) => {
+export const Hub = ({ param }: any) => {
   return (
     <Stack>
       <Group w="100%" justify="space-between" align="flex-start" pt={40} px={50}>

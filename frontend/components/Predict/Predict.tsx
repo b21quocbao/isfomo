@@ -33,7 +33,7 @@ const theme = createTheme({
 const trumpCoinAddr = '0x0AB38A89CA6CC808cB255ECe2CCbf660d74ebeFe';
 const dogeCoinAddr = '0xBdD620d44D64789b24173307A2FE29F0C4c423F0';
 
-export const Predict = ({ param }) => {
+export const Predict = ({ param }: any) => {
   const [searchContent, setSearchContent] = useState(decodeURIComponent(param) ?? 'donald_trump');
   const router = useRouter();
   const pathname = usePathname();
@@ -81,9 +81,9 @@ export const Predict = ({ param }) => {
           });
         setError(null); // Clear any previous errors
       } catch (err) {
-        console.error('Error', err.message);
-        setError(err.message); // Set error message if request fails
-        setResponseData(null); // Clear previous data on error
+        // console.error('Error', err.message);
+        // setError(err.message); // Set error message if request fails
+        setResponseData(null as any); // Clear previous data on error
       }
     };
     handleSubmit(); // Call handleSubmit on mount
@@ -96,12 +96,12 @@ export const Predict = ({ param }) => {
     setShowContent(true);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: any) => {
     e.preventDefault();
     router.push(`/search/${searchContent}`); // Navigate to the results page with the query
   };
 
-  const handleChoose = (link) => {
+  const handleChoose = (link: any) => {
     router.push(`/search/${link}`);
   };
 
@@ -267,7 +267,7 @@ export const Predict = ({ param }) => {
                 </Text>
                 <Stack ml={50} gap="xs">
                   {newsList &&
-                    newsList.map((item, index) => (
+                    newsList.map((item: any, index) => (
                       <Group w="100%" align="flex-start" justify="space-between">
                         <Text fw={600} size="sm">{'No.' + (index + 1) + ':'}</Text>
                         <Stack w="85%" gap={0}>
